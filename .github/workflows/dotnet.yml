@@ -8,6 +8,9 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+    
+env:  
+  ARTIFACTS_PATH: ${{ github.workspace }}/.artifacts
 
 jobs:
   build:
@@ -28,18 +31,25 @@ jobs:
       with:
         token: ${{secrets.GITHUB_TOKEN}}
         
+    - name: Print new build number
+      run: echo "Build number is $BUILD_NUMBER"
+        
     - name: Restore dependencies
       run: dotnet restore 
 
     - name: Build
       run: dotnet build --no-restore
 
-    - name: Print new build number
-      run: echo "Build number is $BUILD_NUMBER"
+    - name: Publish
+      run: dotnet publish --configuration Release --no-restore --output ${{ env.ARTIFACTS_PATH }}
       
-    - name: Build Package
-      run: dotnet pack --configuration Release --no-restore -o ./out/ -p:PackageVersion=$BUILD_PREFIX.$BUILD_NUMBER
+    - name: Nuget package and publish
+      env:
+        VERSION:          $BUILD_PREFIX.$BUILD_NUMBER
+        NUSPEC:           .nuspec
+        NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        nuget pack -NoDefaultExcludes $NUSPEC -Version $VERSION
+        dotnet nuget push *.nupkg -k $NUGET_AUTH_TOKEN $PUSH_ARGS -s https://nuget.pkg.github.com/NewDayCards/index.json 
 
-    - name: Push generated package to GitHub registry
-      run: dotnet nuget push "**/*.nupkg" --skip-duplicate --no-symbols true 
-     
+
