@@ -1,0 +1,45 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+      env:
+        NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    
+    - name: Generate build number
+      uses: einaregilsson/build-number@v3
+      with:
+        token: ${{secrets.GITHUB_TOKEN}}
+        
+    - name: Restore dependencies
+      run: dotnet restore 
+
+    - name: Build
+      run: dotnet build --no-restore
+
+    - name: Print new build number
+      run: echo "Build number is $BUILD_NUMBER"
+      
+    - name: Build Package
+      run: dotnet pack --configuration Release --no-restore -o ./out/ -p:PackageVersion=$BUILD_PREFIX.$BUILD_NUMBER
+
+    - name: Push generated package to GitHub registry
+      run: dotnet nuget push "**/*.nupkg" --skip-duplicate --no-symbols true 
+     
