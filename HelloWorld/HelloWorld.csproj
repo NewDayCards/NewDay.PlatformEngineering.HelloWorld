@@ -6,6 +6,7 @@
 	<Company>NewDay</Company>
 	<Authors>NewDay Platform</Authors>
 	<Copyright>NewDay</Copyright>
+	<Description>Hello World Project</Description>
 	<RootNamespace>NewDay.PlatformEngineering.HelloWorld</RootNamespace>
 	<AssemblyName>NewDay.PlatformEngineering.HelloWorld</AssemblyName>
 	<PackageId>NewDay.PlatformEngineering.HelloWorld</PackageId>
