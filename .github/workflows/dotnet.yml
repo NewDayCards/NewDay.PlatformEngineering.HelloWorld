@@ -11,6 +11,7 @@ on:
     
 env:  
   ARTIFACTS_PATH: ${{ github.workspace }}/.artifacts
+  BUILD_PREFIX: 1.0
 
 jobs:
   build:
