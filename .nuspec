@@ -2,6 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
    <id>NewDay.PlatformEngineering.HelloWorld</id>
+    <description>NewDay - Hello World</description>
     <version>0.0.0</version>
     <authors>NewDay</authors>
     <repository type="git" url="https://github.com/NewDayCards/NewDay.PlatformEngineering.HelloWorld" />
