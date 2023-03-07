@@ -46,7 +46,7 @@ jobs:
       
     - name: Nuget package and publish
       env:
-        VERSION:          ${{BUILD_PREFIX}}.${{BUILD_NUMBER}}
+        VERSION:          1.0.${{BUILD_NUMBER}}
         NUSPEC:           .nuspec
         NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
